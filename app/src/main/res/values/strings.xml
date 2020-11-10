@@ -44,11 +44,14 @@
     <string name="web_service">web服务</string>
     <string name="web_edit_source">web编辑书源</string>
     <string name="http_ip">http://%s:%d</string>
+    <string name="web_service_starting_hint_short">正在启动服务</string>
+    <string name="web_service_starting_hint_long">正在启动服务\n具体信息查看通知栏</string>
+    <string name="web_service_already_started_hint">服务已启动</string>
     <string name="download_offline">离线下载</string>
     <string name="download_offline_t">离线下载</string>
     <string name="download_offline_s">下载选择的章节到本地</string>
     <string name="change_origin">换源</string>
-    <string name="about_description">\u3000\u3000这是一款开源的阅读软件，你可以fork我们的代码自己编译APK。欢迎提交代码帮助改善应用。\n\u3000\u3000公众号[开源阅读软件]！</string>
+    <string name="about_description">\u3000\u3000这是一款开源的阅读软件，你可以fork我们的代码自己编译APK。欢迎提交代码帮助改善应用。\n\u3000\u3000公众号[开源阅读]！</string>
     <string name="version_name">Version %s</string>
     <string name="pt_auto_refresh">自动刷新</string>
     <string name="ps_auto_refresh">打开软件时自动更新书籍</string>
@@ -97,6 +100,10 @@
     <string name="set_timer">定时</string>
     <string name="read_aloud_pause">朗读暂停</string>
     <string name="read_aloud_timer">正在朗读(还剩%d分钟)</string>
+    <string name="read_aloud_timerlong">"正在朗读(还剩%d小时%d分)"</string>
+    <string name="read_aloud_timerremaining">%d分钟</string>
+    <string name="read_aloud_timerremaininglong">"%d小时%d分"</string>
+    <string name="read_aloud_timerstop">"计时已取消"</string>
     <string name="ps_hide_navigation_bar">阅读界面隐藏虚拟按键</string>
     <string name="pt_hide_navigation_bar">隐藏导航栏</string>
     <string name="re_navigation_bar_color">导航栏颜色</string>
@@ -104,6 +111,7 @@
     <string name="scoring">评分</string>
     <string name="send_mail">发送邮件</string>
     <string name="can_not_open">无法打开</string>
+    <string name="can_not_share">分享失败</string>
     <string name="no_chapter">无章节</string>
     <string name="add_url">添加网址</string>
     <string name="add_book_url">添加书籍网址</string>
@@ -256,12 +264,13 @@
     <string name="read_aloud_speed">朗读语速</string>
     <string name="auto_next_page">自动翻页</string>
     <string name="auto_next_page_stop">停止自动翻页</string>
-    <string name="auto_next_page_speed">自动翻页间隔</string>
+    <string name="auto_next_page_speed">自动翻页时每分钟阅读字数(CPM)</string>
     <string name="book_info">书籍信息</string>
     <string name="ps_default_read">默认打开书架</string>
     <string name="pt_default_read">自动跳转最近阅读</string>
     <string name="use_to">替换范围，选填书名或者源名</string>
     <string name="menu_action_group">分组</string>
+    <string name="backup_path">备份路径</string>
     <string name="download_path">内容缓存路径</string>
     <string name="sys_file_picker">系统文件选择器</string>
     <string name="new_version">新版本</string>
@@ -306,7 +315,7 @@
     <string name="page_mode_SLIDE">滑动</string>
     <string name="page_mode_SCROLL">滚动</string>
     <string name="page_mode_NONE">无动画</string>
-    <string name="donate_s">此书源使用了高级功能，复制支付宝红包搜索码领取红包或关注微信公众号[开源阅读软件]开启。</string>
+    <string name="donate_s">此书源使用了高级功能，复制支付宝红包搜索码领取红包或关注微信公众号[开源阅读]开启。</string>
     <string name="up_change_source_last_chapter_t">后台更新换源最新章节</string>
     <string name="up_change_source_last_chapter_s">开启则会在软件打开1分钟后开始更新</string>
     <string name="behavior_main_t">书架ToolBar自动隐藏</string>
@@ -321,6 +330,7 @@
     <string name="book_source_login_url">登录URL(loginUrl)</string>
     <string name="rule_book_author">作者规则(ruleBookAuthor)</string>
     <string name="rule_book_content">正文规则(ruleBookContent)</string>
+    <string name="rule_book_content_replace">正文替换规则(ruleBookContentReplace)</string>
     <string name="rule_book_name">书名规则(ruleBookName)</string>
     <string name="rule_chapter_list">目录列表规则(ruleChapterList)</string>
     <string name="rule_chapter_name">章节名称规则(ruleChapterName)</string>
@@ -356,8 +366,6 @@
     <string name="debug_source">调试书源</string>
     <string name="import_by_qr_code">二维码导入</string>
     <string name="scan_qr_code">扫描二维码</string>
-    <string name="at_char">\@</string>
-    <string name="and_char"><![CDATA[&]]></string>
     <string name="click_on_selected_show_menu">选中时点击可弹出菜单</string>
     <string name="theme">主题</string>
     <string name="default_theme">默认主题</string>
@@ -412,6 +420,7 @@
     <string name="indent_2">二字符缩进</string>
     <string name="indent_3">三字符缩进</string>
     <string name="indent_4">四字符缩进</string>
+    <string name="select_folder">选择文件夹</string>
     <string name="select_sd_file">选择SD卡</string>
     <string name="no_find">没有发现，可以在书源里添加。</string>
     <string name="restore_default">恢复默认</string>
@@ -424,13 +433,17 @@
     <string name="content_padding">正文边距</string>
     <string name="tip_padding">Tip边距</string>
     <string name="text_letter_spacing">字距</string>
-
+    <string name="default_path">默认路径</string>
+    <string name="sys_folder_picker">系统文件夹选择器</string>
+    <string name="app_folder_picker">自带选择器\n(Android10以上因权限限制可能无法使用)</string>
+    <string name="a10_permission_toast">Android10以上因权限限制可能无法读写文件</string>
     <string name="e_ink_mode">E-Ink 模式</string>
     <string name="e_ink_mode_detail">去除动画,优化电纸书使用体验</string>
     <string name="web_menu">Web服务</string>
     <string name="web_port_title">web端口</string>
     <string name="web_port_summary">当前端口 %s</string>
     <string name="qr_share">二维码分享</string>
+    <string name="str_share">字符串分享</string>
     <string name="wifi_share">wifi分享</string>
     <string name="please_grant_storage_permission">请给于存储权限</string>
     <string name="skip_previous">上一个</string>
@@ -443,12 +456,32 @@
     <string name="clear_find_cache">清空发现缓存</string>
     <string name="edit_find">编辑发现</string>
     <string name="change_icon_summary">切换软件显示在桌面的图标</string>
-    <string name="dsm_start"><![CDATA[<]]></string>
-    <string name="dsm_end"><![CDATA[>]]></string>
     <string name="show_enabled">显示勾选</string>
     <string name="to_lh">扩展到刘海</string>
 
     <string name="layout_list">列表视图</string>
     <string name="layout_grid3">网格视图三列</string>
     <string name="layout_grid4">网格视图四列</string>
+    <string name="cover_change_source">封面换源</string>
+    <string name="select_local_image">选择本地图片</string>
+    <string name="refresh_cover">刷新封面</string>
+    <string name="c_page_key">自定义翻页按键</string>
+
+    <string name="custom_page_key">自定义翻页按键</string>
+    <string name="prev_page_key">上一页按键</string>
+    <string name="next_page_key">下一页按键</string>
+
+    <string name="search_result_filter_grade">搜索结果过滤等级</string>
+    <string name="search_result_filter_grade_tip">调高过滤等级可以避免看到书名/作者无关的搜索结果。
+        等级1-9：搜索关键字需要出现到书名/作者中，但是允许有8-0个字（空格不计）没有出现（避免误输入的影响）。默认等级0，不过滤。推荐等级7，允许2个错別字。
+        \n当前过滤等级 %s</string>
+    <string name="light_novel_paragraph">自动重分段落</string>
+    <string name="share_book">分享书籍</string>
+    <string name="add_qrcode">扫二维码</string>
+    <string name="copy_url">复制网址</string>
+    <string name="check_find_source">标记所选发现源</string>
+    <string name="replace_ad">广告话术</string>
+    <string name="replace_ad_title">编辑广告话术规则</string>
+    <string name="replace_add_ad_title">添加广告话术规则</string>
+    <string name="replace_ad_intro">广告话术功能使用了自动优化的算法，不需要使用正则表达式，只需要多次标记不想看的文字，就可以获得较好的广告替换效果。同一个网站的广告话术自动保存在一个规则内，避免了“替换净化”列表里有太多多的规则。</string>
 </resources>

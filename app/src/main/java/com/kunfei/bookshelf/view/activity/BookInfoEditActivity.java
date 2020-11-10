@@ -8,15 +8,12 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.impl.IPresenter;
@@ -30,22 +27,21 @@ import com.kunfei.bookshelf.help.permission.PermissionsCompat;
 import com.kunfei.bookshelf.utils.FileUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.theme.ThemeStore;
-import com.kunfei.bookshelf.widget.modialog.ChangeSourceDialog;
+import com.kunfei.bookshelf.widget.image.CoverImageView;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
-
-import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import kotlin.Unit;
 
-public class BookInfoEditActivity extends MBaseActivity {
+public class BookInfoEditActivity extends MBaseActivity<IPresenter> {
     private final int ResultSelectCover = 103;
+    private final int ResultEditCover = 104;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.iv_cover)
-    ImageView ivCover;
+    CoverImageView ivCover;
     @BindView(R.id.tie_book_name)
     EditText tieBookName;
     @BindView(R.id.til_book_name)
@@ -151,13 +147,12 @@ public class BookInfoEditActivity extends MBaseActivity {
     protected void bindEvent() {
         super.bindEvent();
         tvSelectCover.setOnClickListener(view -> selectCover());
-        tvChangeCover.setOnClickListener(view ->
-                ChangeSourceDialog.builder(BookInfoEditActivity.this, book)
-                        .setCallback(searchBookBean -> {
-                            tieCoverUrl.setText(searchBookBean.getCoverUrl());
-                            book.setCustomCoverPath(tieCoverUrl.getText().toString());
-                            initCover();
-                        }).show());
+        tvChangeCover.setOnClickListener(view ->{
+            Intent intent = new Intent(BookInfoEditActivity.this, BookCoverEditActivity.class);
+            intent.putExtra("name",book.getBookInfoBean().getName());
+            intent.putExtra("author",book.getBookInfoBean().getAuthor());
+            startActivityForResult(intent, ResultEditCover);
+                });
         tvRefreshCover.setOnClickListener(view -> {
             book.setCustomCoverPath(tieCoverUrl.getText().toString());
             initCover();
@@ -180,25 +175,7 @@ public class BookInfoEditActivity extends MBaseActivity {
 
     private void initCover() {
         if (!this.isFinishing() && book != null) {
-            if (TextUtils.isEmpty(book.getCustomCoverPath())) {
-                Glide.with(this).load(book.getBookInfoBean().getCoverUrl())
-                        .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                        .centerCrop()
-                        .placeholder(R.drawable.img_cover_default)
-                        .into(ivCover);
-            } else if (book.getCustomCoverPath().startsWith("http")) {
-                Glide.with(this).load(book.getCustomCoverPath())
-                        .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                        .centerCrop()
-                        .placeholder(R.drawable.img_cover_default)
-                        .into(ivCover);
-            } else {
-                Glide.with(this).load(new File(book.getCustomCoverPath()))
-                        .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                        .centerCrop()
-                        .placeholder(R.drawable.img_cover_default)
-                        .into(ivCover);
-            }
+            ivCover.load(book.getCoverPath(), book.getName(), book.getAuthor());
         }
     }
 
@@ -269,6 +246,14 @@ public class BookInfoEditActivity extends MBaseActivity {
                 if (resultCode == RESULT_OK && null != data) {
                     tieCoverUrl.setText(FileUtils.getPath(this, data.getData()));
                     book.setCustomCoverPath(tieCoverUrl.getText().toString());
+                    initCover();
+                }
+                break;
+            case ResultEditCover:
+                if (resultCode == RESULT_OK && null != data) {
+                    String url = data.getStringExtra("url");
+                    tieCoverUrl.setText(url);
+                    book.setCustomCoverPath(url);
                     initCover();
                 }
                 break;

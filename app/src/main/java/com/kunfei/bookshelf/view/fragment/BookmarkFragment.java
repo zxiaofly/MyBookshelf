@@ -30,7 +30,7 @@ import butterknife.Unbinder;
 import io.reactivex.Single;
 import io.reactivex.SingleOnSubscribe;
 
-public class BookmarkFragment extends MBaseFragment {
+public class BookmarkFragment extends MBaseFragment<IPresenter> {
     @BindView(R.id.rv_list)
     FastScrollRecyclerView rvList;
 
@@ -143,8 +143,13 @@ public class BookmarkFragment extends MBaseFragment {
 
                     @Override
                     public void delBookmark(BookmarkBean bookmarkBean) {
+//                        Log.d("delBookmark","before="+bookmarkBeanList.size());
                         DbHelper.getDaoSession().getBookmarkBeanDao().delete(bookmarkBean);
-                        adapter.notifyDataSetChanged();
+//                        Log.d("delBookmark","after="+bookmarkBeanList.size());
+                        bookmarkBeanList = BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName());
+//                        Log.d("delBookmark","fine="+bookmarkBeanList.size());
+                        adapter.setAllBookmark(bookmarkBeanList);
+//                        adapter.notifyDataSetChanged();
                     }
 
                     @Override

@@ -146,9 +146,6 @@ public class PageView extends View implements PageAnimation.OnPageChangeListener
             marginTop = marginTop + statusBarHeight;
         }
         switch (pageMode) {
-            case SIMULATION:
-                mPageAnim = new SimulationPageAnim(mViewWidth, mViewHeight, this, this);
-                break;
             case COVER:
                 mPageAnim = new CoverPageAnim(mViewWidth, mViewHeight, this, this);
                 break;
@@ -439,8 +436,8 @@ public class PageView extends View implements PageAnimation.OnPageChangeListener
                 RectF rect = new RectF(fistchar.getTopLeftPosition().x, fistchar.getTopLeftPosition().y,
                         lastchar.getTopRightPosition().x, lastchar.getBottomRightPosition().y);
 
-                canvas.drawRoundRect(rect, fw / 2,
-                        textHeight / 2, mTextSelectPaint);
+                canvas.drawRoundRect(rect, fw / 4,
+                        textHeight /4, mTextSelectPaint);
             }
         }
     }

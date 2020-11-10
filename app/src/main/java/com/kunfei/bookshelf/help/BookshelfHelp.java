@@ -40,7 +40,7 @@ import java.util.regex.Pattern;
 
 public class BookshelfHelp {
 
-    private static Pattern chapterNamePattern = Pattern.compile("^(.*?第([\\d零〇一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟０-９\\s]+)[章节篇回集])[、，。　：:.\\s]*");
+    private static final Pattern chapterNamePattern = Pattern.compile("^(.*?第([\\d零〇一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟０-９\\s]+)[章节篇回集])[、，。　：:.\\s]*");
 
     public static String getCachePathName(String bookName, String tag) {
         return formatFolderName(bookName + "-" + tag);
@@ -125,7 +125,7 @@ public class BookshelfHelp {
      * 创建或获取存储文件
      */
     public static File getBookFile(String folderName, int index, String fileName) {
-        return FileHelp.getFile(AppConstant.BOOK_CACHE_PATH + formatFolderName(folderName)
+        return FileHelp.createFileIfNotExist(AppConstant.BOOK_CACHE_PATH + formatFolderName(folderName)
                 + File.separator + getCacheFileName(index, fileName) + FileHelp.SUFFIX_NB);
     }
 
@@ -249,6 +249,13 @@ public class BookshelfHelp {
             }
         }
         return null;
+    }
+
+    public static List<BookInfoBean> searchBookInfo(String key) {
+        return DbHelper.getDaoSession().getBookInfoBeanDao().queryBuilder()
+                .where(BookInfoBeanDao.Properties.Name.like("%" + key + "%"))
+                .orderAsc(BookInfoBeanDao.Properties.Name)
+                .list();
     }
 
     /**

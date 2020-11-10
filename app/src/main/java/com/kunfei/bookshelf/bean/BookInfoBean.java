@@ -31,14 +31,14 @@ import java.util.Objects;
 @Entity
 public class BookInfoBean implements Cloneable {
 
-    private String name; //小说名
+    private String name=""; //小说名。初始化为空字符串，以避免由于规则不完善，书名为空时，某些操作造成的一些异常（比如删除书名为空的书）
     private String tag;
     @Id
     private String noteUrl;  //如果是来源网站,则小说根地址,如果是本地则是小说本地MD5
     private String chapterUrl;  //章节目录地址,本地目录正则
     private long finalRefreshData;  //章节最后更新时间
     private String coverUrl; //小说封面
-    private String author;//作者
+    private String author="";//作者
     private String introduce; //简介
     private String origin; //来源
     private String charset;//编码
@@ -53,7 +53,7 @@ public class BookInfoBean implements Cloneable {
 
     @Generated(hash = 906814482)
     public BookInfoBean(String name, String tag, String noteUrl, String chapterUrl, long finalRefreshData, String coverUrl, String author, String introduce,
-                        String origin, String charset, String bookSourceType) {
+            String origin, String charset, String bookSourceType) {
         this.name = name;
         this.tag = tag;
         this.noteUrl = noteUrl;

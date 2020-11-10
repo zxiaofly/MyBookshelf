@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
  * 捐赠页面
  */
 
-public class DonateActivity extends MBaseActivity {
+public class DonateActivity extends MBaseActivity<IPresenter> {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.cv_wx_gzh)
@@ -89,16 +89,16 @@ public class DonateActivity extends MBaseActivity {
         vwZfbTz.setOnClickListener(view -> Donate.aliDonate(this));
         cvWxGzh.setOnClickListener(view -> {
             ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clipData = ClipData.newPlainText(null, "开源阅读软件");
+            ClipData clipData = ClipData.newPlainText(null, "开源阅读");
             if (clipboard != null) {
                 clipboard.setPrimaryClip(clipData);
                 toast(R.string.copy_complete);
             }
         });
-        vwZfbHb.setOnClickListener(view -> openActionViewIntent("https://gedoor.github.io/MyBookshelf/zfbhbrwm.png"));
-        vwZfbRwm.setOnClickListener(view -> openActionViewIntent("https://gedoor.github.io/MyBookshelf/zfbskrwm.jpg"));
-        vwWxRwm.setOnClickListener(view -> openActionViewIntent("https://gedoor.github.io/MyBookshelf/wxskrwm.jpg"));
-        vwQqRwm.setOnClickListener(view -> openActionViewIntent("https://gedoor.github.io/MyBookshelf/qqskrwm.jpg"));
+        vwZfbHb.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/zfbhbrwm.png"));
+        vwZfbRwm.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/zfbskrwm.jpg"));
+        vwWxRwm.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/wxskrwm.jpg"));
+        vwQqRwm.setOnClickListener(view -> openActionViewIntent("https://gitee.com/gekunfei/Donate/raw/master/qqskrwm.jpg"));
         vwZfbHbSsm.setOnClickListener(view -> getZfbHb(this));
     }
 

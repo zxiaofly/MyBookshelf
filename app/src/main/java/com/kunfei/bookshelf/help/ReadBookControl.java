@@ -39,6 +39,7 @@ public class ReadBookControl {
     private float lineMultiplier;
     private float paragraphSize;
     private int pageMode;
+    private Boolean lightNovelParagraph;
     private Boolean hideStatusBar;
     private Boolean hideNavigationBar;
     private String fontPath;
@@ -48,7 +49,7 @@ public class ReadBookControl {
     private Boolean canClickTurn;
     private Boolean canKeyTurn;
     private Boolean readAloudCanKeyTurn;
-    private int clickSensitivity;
+    private int CPM;
     private Boolean clickAllNext;
     private Boolean showTitle;
     private Boolean showTimeBattery;
@@ -66,6 +67,9 @@ public class ReadBookControl {
     private int tipPaddingBottom;
     private float textLetterSpacing;
     private boolean canSelectText;
+    public int minCPM = 200;
+    public int maxCPM = 2000;
+    private int defaultCPM = 500;
 
     private SharedPreferences preferences;
 
@@ -88,7 +92,8 @@ public class ReadBookControl {
         updateReaderSettings();
     }
 
-    void updateReaderSettings() {
+    public void updateReaderSettings() {
+        this.lightNovelParagraph = preferences.getBoolean("light_novel_paragraph", false);
         this.hideStatusBar = preferences.getBoolean("hide_status_bar", false);
         this.hideNavigationBar = preferences.getBoolean("hide_navigation_bar", false);
         this.indent = preferences.getInt("indent", 2);
@@ -98,8 +103,8 @@ public class ReadBookControl {
         this.readAloudCanKeyTurn = preferences.getBoolean("readAloudCanKeyTurn", false);
         this.lineMultiplier = preferences.getFloat("lineMultiplier", 1);
         this.paragraphSize = preferences.getFloat("paragraphSize", 1);
-        this.clickSensitivity = preferences.getInt("clickSensitivity", 50) > 100
-                ? 50 : preferences.getInt("clickSensitivity", 50);
+        this.CPM = preferences.getInt("CPM", defaultCPM) > maxCPM
+                ? minCPM : preferences.getInt("CPM", defaultCPM);
         this.clickAllNext = preferences.getBoolean("clickAllNext", false);
         this.fontPath = preferences.getString("fontPath", null);
         this.textConvert = preferences.getInt("textConvertInt", 0);
@@ -183,7 +188,7 @@ public class ReadBookControl {
     @SuppressWarnings("ConstantConditions")
     private void initPageStyle() {
         int bgCustom = getBgCustom(textDrawableIndex);
-        if ((bgCustom == 2 || bgCustom == 3)  && getBgPath(textDrawableIndex) != null) {
+        if ((bgCustom == 2 || bgCustom == 3) && getBgPath(textDrawableIndex) != null) {
             bgIsColor = false;
             String bgPath = getBgPath(textDrawableIndex);
             Resources resources = MApplication.getInstance().getResources();
@@ -503,14 +508,15 @@ public class ReadBookControl {
                 .apply();
     }
 
-    public int getClickSensitivity() {
-        return clickSensitivity;
+    public int getCPM() {
+        return CPM;
     }
 
-    public void setClickSensitivity(int clickSensitivity) {
-        this.clickSensitivity = clickSensitivity;
+    public void setCPM(int cpm) {
+        if (cpm < minCPM || cpm > maxCPM) cpm = defaultCPM;
+        this.CPM = cpm;
         preferences.edit()
-                .putInt("clickSensitivity", clickSensitivity)
+                .putInt("CPM", cpm)
                 .apply();
     }
 
@@ -566,6 +572,15 @@ public class ReadBookControl {
         this.showTimeBattery = showTimeBattery;
         preferences.edit()
                 .putBoolean("showTimeBattery", showTimeBattery)
+                .apply();
+    }
+
+    public Boolean getLightNovelParagraph(){return lightNovelParagraph;}
+
+    public void setLightNovelParagraph(Boolean lightNovelParagraph) {
+        this.lightNovelParagraph = lightNovelParagraph;
+        preferences.edit()
+                .putBoolean("light_novel_paragraph", lightNovelParagraph)
                 .apply();
     }
 

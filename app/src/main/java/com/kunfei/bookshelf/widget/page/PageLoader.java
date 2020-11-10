@@ -577,6 +577,24 @@ public abstract class PageLoader {
     }
 
     /**
+     * * @return curPageLength 当前页字数
+     */
+    public int curPageLength() {
+        if (curChapter().txtChapter == null) return 0;
+        if (curChapter().txtChapter.getStatus() != TxtChapter.Status.FINISH) return 0;
+        String str;
+        int strLength = 0;
+        TxtPage txtPage = curChapter().txtChapter.getPage(mCurPagePos);
+        if (txtPage != null) {
+            for (int i = txtPage.getTitleLines(); i < txtPage.size(); ++i) {
+                str = txtPage.getLine(i);
+                strLength = strLength + str.length();
+            }
+        }
+        return strLength;
+    }
+
+    /**
      * @param page 开始页数
      * @return 从page页开始的的当前章节所有内容
      */
@@ -1757,13 +1775,13 @@ public abstract class PageLoader {
 
     /*****************************************interface*****************************************/
 
-    class ChapterContainer {
+    static class ChapterContainer {
         TxtChapter txtChapter;
     }
 
     /**
      * --------------------
-     * TODO 检测获取按压坐标所在位置的字符，没有的话返回null
+     * 检测获取按压坐标所在位置的字符，没有的话返回null
      * --------------------
      * author: huangwei
      * 2017年7月4日上午10:23:19

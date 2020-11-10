@@ -13,8 +13,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 
-import static android.text.TextUtils.isEmpty;
-
 public class EncodeConverter extends Converter.Factory {
     private String encode;
 
@@ -37,20 +35,20 @@ public class EncodeConverter extends Converter.Factory {
     @Override
     public Converter<ResponseBody, String> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
         return value -> {
+            byte[] responseBytes = UTF8BOMFighter.removeUTF8BOM(value.bytes());
             if (!TextUtils.isEmpty(encode)) {
-                return new String((value.bytes()), encode);
+                try {
+                    return new String((responseBytes), Charset.forName(encode));
+                } catch (Exception ignored) {
+                }
             }
             String charsetStr;
             MediaType mediaType = value.contentType();
-            byte[] responseBytes = value.bytes();
             //根据http头判断
             if (mediaType != null) {
                 Charset charset = mediaType.charset();
                 if (charset != null) {
-                    charsetStr = charset.displayName();
-                    if (!isEmpty(charsetStr)) {
-                        return new String(responseBytes, Charset.forName(charsetStr));
-                    }
+                    return new String((responseBytes), charset);
                 }
             }
             //根据内容判断
@@ -58,4 +56,5 @@ public class EncodeConverter extends Converter.Factory {
             return new String(responseBytes, Charset.forName(charsetStr));
         };
     }
+
 }

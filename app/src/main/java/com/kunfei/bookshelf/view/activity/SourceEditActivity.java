@@ -54,9 +54,12 @@ import com.kunfei.bookshelf.view.adapter.SourceEditAdapter;
 import com.kunfei.bookshelf.view.popupwindow.KeyboardToolPop;
 import com.kunfei.bookshelf.widget.views.ATECheckBox;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -75,7 +78,7 @@ import static android.text.TextUtils.isEmpty;
  * 编辑书源
  */
 
-public class SourceEditActivity extends MBaseActivity<SourceEditContract.Presenter> implements SourceEditContract.View {
+public class SourceEditActivity extends MBaseActivity<SourceEditContract.Presenter> implements SourceEditContract.View, KeyboardToolPop.CallBack {
     public final static int EDIT_SOURCE = 1101;
     private final int REQUEST_QR = 202;
 
@@ -104,6 +107,8 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     private PopupWindow mSoftKeyboardTool;
     private boolean mIsSoftKeyBoardShowing = false;
     private boolean showFind;
+    private String[] keyHelp = {"@", "&", "|", "%", "/", ":", "[", "]", "(", ")", "{", "}", "<", ">", "\\", "$", "#", "!", ".",
+            "href", "src", "textNodes", "xpath", "json", "css", "id", "class", "tag"};
 
     public static void startThis(Object object, BookSourceBean sourceBean) {
         String key = String.valueOf(System.currentTimeMillis());
@@ -178,7 +183,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
-        mSoftKeyboardTool = new KeyboardToolPop(this, this::insertTextToEditText);
+        mSoftKeyboardTool = new KeyboardToolPop(this, Arrays.asList(keyHelp), this);
         getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(new KeyboardOnGlobalChangeListener());
         adapter = new SourceEditAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -261,6 +266,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         //正文页
         sourceEditList.add(new SourceEdit("ruleContentUrlNext", bookSourceBean.getRuleContentUrlNext(), R.string.rule_content_url_next));
         sourceEditList.add(new SourceEdit("ruleBookContent", bookSourceBean.getRuleBookContent(), R.string.rule_book_content));
+        sourceEditList.add(new SourceEdit("ruleBookContentReplace", bookSourceBean.getRuleBookContentReplace(), R.string.rule_book_content_replace));
         sourceEditList.add(new SourceEdit("httpUserAgent", bookSourceBean.getHttpUserAgent(), R.string.source_user_agent));
 
         //发现
@@ -376,6 +382,9 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                 case "ruleBookContent":
                     bookSourceBeanN.setRuleBookContent(sourceEdit.value);
                     break;
+                case "ruleBookContentReplace":
+                    bookSourceBeanN.setRuleBookContentReplace(sourceEdit.value);
+                    break;
                 case "httpUserAgent":
                     bookSourceBeanN.setHttpUserAgent(sourceEdit.value);
                     break;
@@ -468,6 +477,17 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         }
     }
 
+    private void shareText(String title, String text) {
+        try {
+            Intent textIntent = new Intent(Intent.ACTION_SEND);
+            textIntent.setType("text/plain");
+            textIntent.putExtra(Intent.EXTRA_TEXT, text);
+            startActivity(Intent.createChooser(textIntent, title));
+        } catch (Exception e) {
+            toast(R.string.can_not_share, ERROR);
+        }
+    }
+
     //设置ToolBar
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
@@ -529,6 +549,9 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                 break;
             case R.id.action_share_it:
                 shareBookSource();
+                break;
+            case R.id.action_share_str:
+                shareText("Source Share", getBookSourceStr(true));
                 break;
             case R.id.action_share_wifi:
                 ShareService.startThis(this, Collections.singletonList(getBookSource(true)));
@@ -632,7 +655,8 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         return false;
     }
 
-    private void insertTextToEditText(String txt) {
+    @Override
+    public void sendText(@NotNull String txt) {
         if (isEmpty(txt)) return;
         View view = getWindow().getDecorView().findFocus();
         if (view instanceof EditText) {

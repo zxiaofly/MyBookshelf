@@ -263,7 +263,7 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
 
     public int getUnreadChapterNum() {
         int num = getChapterListSize() - getDurChapter() - 1;
-        return num < 0 ? 0 : num;
+        return Math.max(num, 0);
     }
 
     public int getChapterListSize() {
@@ -276,6 +276,14 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
 
     public String getCustomCoverPath() {
         return this.customCoverPath;
+    }
+
+    public String getCoverPath() {
+        if (TextUtils.isEmpty(customCoverPath)) {
+            return bookInfoBean.getCoverUrl();
+        } else {
+            return this.customCoverPath;
+        }
     }
 
     public void setCustomCoverPath(String customCoverPath) {
@@ -304,6 +312,14 @@ public class BookShelfBean implements Cloneable, BaseBookBean {
 
     public Boolean getReplaceEnable() {
         return replaceEnable == null ? MApplication.getConfigPreferences().getBoolean("replaceEnableDefault", true) : replaceEnable;
+    }
+
+    public String getName() {
+        return bookInfoBean.getName();
+    }
+
+    public String getAuthor() {
+        return bookInfoBean.getAuthor();
     }
 
     public void setReplaceEnable(Boolean replaceEnable) {
